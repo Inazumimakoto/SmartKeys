@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0E07851C2EC37170000620ED /* .gitignore in Sources */ = {isa = PBXBuildFile; fileRef = 0E07851B2EC37153000620ED /* .gitignore */; };
 		0EBB458F2EC0B75C006B81EA /* SmartKeysKeyboard.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 0EBB45882EC0B75C006B81EA /* SmartKeysKeyboard.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
@@ -36,7 +35,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		0E07851B2EC37153000620ED /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = .gitignore; sourceTree = "<group>"; };
 		0EBB45762EC0B190006B81EA /* SmartKeys.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SmartKeys.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0EBB45882EC0B75C006B81EA /* SmartKeysKeyboard.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = SmartKeysKeyboard.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -88,7 +86,6 @@
 		0EBB456D2EC0B190006B81EA = {
 			isa = PBXGroup;
 			children = (
-				0E07851B2EC37153000620ED /* .gitignore */,
 				0EBB45782EC0B190006B81EA /* SmartKeys */,
 				0EBB45892EC0B75C006B81EA /* SmartKeysKeyboard */,
 				0EBB45772EC0B190006B81EA /* Products */,
@@ -213,7 +210,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0E07851C2EC37170000620ED /* .gitignore in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

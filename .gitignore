@@ -1,7 +1,21 @@
-//
-//  .gitignore
-//  SmartKeys
-//
-//  Created by inazumimakoto on 2025/11/11.
-//
+# macOS
+.DS_Store
 
+# Xcode
+DerivedData/
+build/
+xcuserdata/
+*.xcuserstate
+
+# Swift Package Manager
+.build/
+
+# 依存管理（使っていれば）
+Pods/
+Carthage/Build/
+
+# fastlane（使っていれば）
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/**/*.png
+fastlane/test_output
