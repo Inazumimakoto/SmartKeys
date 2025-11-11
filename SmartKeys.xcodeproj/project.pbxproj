@@ -6,14 +6,63 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		0E07851C2EC37170000620ED /* .gitignore in Sources */ = {isa = PBXBuildFile; fileRef = 0E07851B2EC37153000620ED /* .gitignore */; };
+		0EBB458F2EC0B75C006B81EA /* SmartKeysKeyboard.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 0EBB45882EC0B75C006B81EA /* SmartKeysKeyboard.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		0EBB458D2EC0B75C006B81EA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0EBB456E2EC0B190006B81EA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 0EBB45872EC0B75C006B81EA;
+			remoteInfo = SmartKeysKeyboard;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		0EBB45942EC0B75C006B81EA /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				0EBB458F2EC0B75C006B81EA /* SmartKeysKeyboard.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		0E07851B2EC37153000620ED /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = .gitignore; sourceTree = "<group>"; };
 		0EBB45762EC0B190006B81EA /* SmartKeys.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SmartKeys.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		0EBB45882EC0B75C006B81EA /* SmartKeysKeyboard.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = SmartKeysKeyboard.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		0EBB45902EC0B75C006B81EA /* Exceptions for "SmartKeysKeyboard" folder in "SmartKeysKeyboard" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 0EBB45872EC0B75C006B81EA /* SmartKeysKeyboard */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		0EBB45782EC0B190006B81EA /* SmartKeys */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = SmartKeys;
+			sourceTree = "<group>";
+		};
+		0EBB45892EC0B75C006B81EA /* SmartKeysKeyboard */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				0EBB45902EC0B75C006B81EA /* Exceptions for "SmartKeysKeyboard" folder in "SmartKeysKeyboard" target */,
+			);
+			path = SmartKeysKeyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -26,13 +75,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		0EBB45852EC0B75C006B81EA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		0EBB456D2EC0B190006B81EA = {
 			isa = PBXGroup;
 			children = (
+				0E07851B2EC37153000620ED /* .gitignore */,
 				0EBB45782EC0B190006B81EA /* SmartKeys */,
+				0EBB45892EC0B75C006B81EA /* SmartKeysKeyboard */,
 				0EBB45772EC0B190006B81EA /* Products */,
 			);
 			sourceTree = "<group>";
@@ -41,6 +99,7 @@
 			isa = PBXGroup;
 			children = (
 				0EBB45762EC0B190006B81EA /* SmartKeys.app */,
+				0EBB45882EC0B75C006B81EA /* SmartKeysKeyboard.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -55,10 +114,12 @@
 				0EBB45722EC0B190006B81EA /* Sources */,
 				0EBB45732EC0B190006B81EA /* Frameworks */,
 				0EBB45742EC0B190006B81EA /* Resources */,
+				0EBB45942EC0B75C006B81EA /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				0EBB458E2EC0B75C006B81EA /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				0EBB45782EC0B190006B81EA /* SmartKeys */,
@@ -69,6 +130,28 @@
 			productName = SmartKeys;
 			productReference = 0EBB45762EC0B190006B81EA /* SmartKeys.app */;
 			productType = "com.apple.product-type.application";
+		};
+		0EBB45872EC0B75C006B81EA /* SmartKeysKeyboard */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0EBB45912EC0B75C006B81EA /* Build configuration list for PBXNativeTarget "SmartKeysKeyboard" */;
+			buildPhases = (
+				0EBB45842EC0B75C006B81EA /* Sources */,
+				0EBB45852EC0B75C006B81EA /* Frameworks */,
+				0EBB45862EC0B75C006B81EA /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				0EBB45892EC0B75C006B81EA /* SmartKeysKeyboard */,
+			);
+			name = SmartKeysKeyboard;
+			packageProductDependencies = (
+			);
+			productName = SmartKeysKeyboard;
+			productReference = 0EBB45882EC0B75C006B81EA /* SmartKeysKeyboard.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -81,6 +164,9 @@
 				LastUpgradeCheck = 2610;
 				TargetAttributes = {
 					0EBB45752EC0B190006B81EA = {
+						CreatedOnToolsVersion = 26.1;
+					};
+					0EBB45872EC0B75C006B81EA = {
 						CreatedOnToolsVersion = 26.1;
 					};
 				};
@@ -100,12 +186,20 @@
 			projectRoot = "";
 			targets = (
 				0EBB45752EC0B190006B81EA /* SmartKeys */,
+				0EBB45872EC0B75C006B81EA /* SmartKeysKeyboard */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		0EBB45742EC0B190006B81EA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0EBB45862EC0B75C006B81EA /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -119,10 +213,26 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0E07851C2EC37170000620ED /* .gitignore in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0EBB45842EC0B75C006B81EA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		0EBB458E2EC0B75C006B81EA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 0EBB45872EC0B75C006B81EA /* SmartKeysKeyboard */;
+			targetProxy = 0EBB458D2EC0B75C006B81EA /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		0EBB457F2EC0B191006B81EA /* Debug */ = {
@@ -306,6 +416,60 @@
 			};
 			name = Release;
 		};
+		0EBB45922EC0B75C006B81EA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SmartKeysKeyboard/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = SmartKeysKeyboard;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.inazumimakoto.SmartKeys.SmartKeysKeyboard;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		0EBB45932EC0B75C006B81EA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SmartKeysKeyboard/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = SmartKeysKeyboard;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.inazumimakoto.SmartKeys.SmartKeysKeyboard;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -323,6 +487,15 @@
 			buildConfigurations = (
 				0EBB45822EC0B191006B81EA /* Debug */,
 				0EBB45832EC0B191006B81EA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		0EBB45912EC0B75C006B81EA /* Build configuration list for PBXNativeTarget "SmartKeysKeyboard" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0EBB45922EC0B75C006B81EA /* Debug */,
+				0EBB45932EC0B75C006B81EA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
