@@ -1,4 +1,3 @@
-
 # SmartKeys 要件 v0.2
 
 ## 概要
@@ -43,7 +42,7 @@
    - `InputEngine` のローマ字→かなのユニットテスト（`konnichiha`, `ryokou`, `shinjuku`, `nn` ケースなど）。
 
 ## ビルド / 動作確認
-- ビルド:xcodebuild -scheme SmartKeys -destination 'platform=iOS Simulator,name=iPhone 17'
+- ビルド:  xcodebuild -scheme SmartKeys -destination 'platform=iOS Simulator,name=iPhone 17'
 - 検証シナリオ:
 - `konnichiha` → `こんにちは`
 - `12:00` で MM 側 +1 → `12:01`、00で -1 → `12:59`（HHは変えない）
@@ -60,4 +59,5 @@
 ## ディレクトリ
 - `SmartKeysKeyboard/KeyboardViewController.swift`（UI/フリック・操作系）
 - `SmartKeysKeyboard/InputEngine.swift`（ローマ字IMEコア）
+
 
