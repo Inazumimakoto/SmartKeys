@@ -40,6 +40,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		0E07852D2EC4CA14000620ED /* Exceptions for "SmartKeys" folder in "SmartKeys" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				requirements.md,
+			);
+			target = 0EBB45752EC0B190006B81EA /* SmartKeys */;
+		};
 		0EBB45902EC0B75C006B81EA /* Exceptions for "SmartKeysKeyboard" folder in "SmartKeysKeyboard" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -52,6 +59,9 @@
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		0EBB45782EC0B190006B81EA /* SmartKeys */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				0E07852D2EC4CA14000620ED /* Exceptions for "SmartKeys" folder in "SmartKeys" target */,
+			);
 			path = SmartKeys;
 			sourceTree = "<group>";
 		};
