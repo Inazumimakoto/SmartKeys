@@ -1,5 +1,194 @@
 import UIKit
 
+private enum FlickDirection: CaseIterable {
+    case center, up, down, left, right
+}
+
+private final class FlickPopupView: UIView {
+    private var labels: [FlickDirection: UILabel] = [:]
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        translatesAutoresizingMaskIntoConstraints = false
+        isUserInteractionEnabled = false
+        backgroundColor = UIColor.systemBackground.withAlphaComponent(0.92)
+        layer.cornerRadius = 8
+        layer.shadowColor = UIColor.black.cgColor
+        layer.shadowOpacity = 0.15
+        layer.shadowRadius = 6
+        layer.shadowOffset = CGSize(width: 0, height: 2)
+
+        func makeLabel() -> UILabel {
+            let label = UILabel()
+            label.translatesAutoresizingMaskIntoConstraints = false
+            label.font = .systemFont(ofSize: 16, weight: .semibold)
+            label.textAlignment = .center
+            label.textColor = .label
+            label.backgroundColor = .clear
+            label.widthAnchor.constraint(equalToConstant: 32).isActive = true
+            label.heightAnchor.constraint(equalToConstant: 28).isActive = true
+            return label
+        }
+
+        let upLabel = makeLabel()
+        let downLabel = makeLabel()
+        let leftLabel = makeLabel()
+        let rightLabel = makeLabel()
+        let centerLabel = makeLabel()
+
+        labels[.up] = upLabel
+        labels[.down] = downLabel
+        labels[.left] = leftLabel
+        labels[.right] = rightLabel
+        labels[.center] = centerLabel
+
+        let middle = UIStackView(arrangedSubviews: [leftLabel, centerLabel, rightLabel])
+        middle.axis = .horizontal
+        middle.alignment = .center
+        middle.distribution = .equalCentering
+        middle.spacing = 6
+
+        let container = UIStackView(arrangedSubviews: [upLabel, middle, downLabel])
+        container.axis = .vertical
+        container.alignment = .center
+        container.spacing = 4
+        container.translatesAutoresizingMaskIntoConstraints = false
+
+        addSubview(container)
+        NSLayoutConstraint.activate([
+            container.centerXAnchor.constraint(equalTo: centerXAnchor),
+            container.centerYAnchor.constraint(equalTo: centerYAnchor)
+        ])
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    func updateTexts(base: String, outputs: [FlickDirection: String]) {
+        labels[.center]?.text = base
+        for direction in FlickDirection.allCases where direction != .center {
+            if let text = outputs[direction] {
+                labels[direction]?.text = text
+                labels[direction]?.isHidden = false
+            } else {
+                labels[direction]?.text = nil
+                labels[direction]?.isHidden = true
+            }
+        }
+        updateSelection(.center)
+    }
+
+    func updateSelection(_ direction: FlickDirection) {
+        for (dir, label) in labels {
+            if dir == direction {
+                label.backgroundColor = UIColor.systemBlue.withAlphaComponent(0.18)
+                label.layer.cornerRadius = 6
+                label.layer.masksToBounds = true
+            } else {
+                label.backgroundColor = .clear
+                label.layer.cornerRadius = 0
+                label.layer.masksToBounds = false
+            }
+        }
+    }
+}
+
+private final class FlickKeyButton: UIButton {
+    var baseKey: String = ""
+    var flickOutputs: [FlickDirection: String] = [:]
+    var commitHandler: ((FlickDirection, String) -> Void)?
+
+    private var popupView: FlickPopupView?
+    private var startPoint: CGPoint = .zero
+    private var currentDirection: FlickDirection = .center
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        adjustsImageWhenHighlighted = false
+    }
+
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        adjustsImageWhenHighlighted = false
+    }
+
+    override func beginTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
+        startPoint = touch.location(in: self)
+        if !flickOutputs.isEmpty {
+            showPopup()
+        }
+        currentDirection = .center
+        return super.beginTracking(touch, with: event)
+    }
+
+    override func continueTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
+        guard !flickOutputs.isEmpty else { return super.continueTracking(touch, with: event) }
+        let point = touch.location(in: self)
+        let dx = point.x - startPoint.x
+        let dy = point.y - startPoint.y
+        let threshold: CGFloat = 18
+        var newDirection: FlickDirection = .center
+        if abs(dx) > threshold || abs(dy) > threshold {
+            if abs(dx) > abs(dy) {
+                newDirection = dx > 0 ? .right : .left
+            } else {
+                newDirection = dy < 0 ? .up : .down
+            }
+        }
+        if flickOutputs[newDirection] == nil { newDirection = .center }
+        if newDirection != currentDirection {
+            currentDirection = newDirection
+            popupView?.updateSelection(newDirection)
+        }
+        return super.continueTracking(touch, with: event)
+    }
+
+    override func endTracking(_ touch: UITouch?, with event: UIEvent?) {
+        defer { hidePopup() }
+        if currentDirection == .center {
+            sendActions(for: .touchUpInside)
+        } else if let output = flickOutputs[currentDirection] {
+            commitHandler?(currentDirection, output)
+        } else {
+            sendActions(for: .touchUpInside)
+        }
+        currentDirection = .center
+        super.endTracking(touch, with: event)
+    }
+
+    override func cancelTracking(with event: UIEvent?) {
+        hidePopup()
+        currentDirection = .center
+        super.cancelTracking(with: event)
+    }
+
+    private func showPopup() {
+        if popupView == nil {
+            let popup = FlickPopupView()
+            addSubview(popup)
+            NSLayoutConstraint.activate([
+                popup.centerXAnchor.constraint(equalTo: centerXAnchor),
+                popup.centerYAnchor.constraint(equalTo: centerYAnchor),
+                popup.widthAnchor.constraint(equalToConstant: 96),
+                popup.heightAnchor.constraint(equalToConstant: 96)
+            ])
+            popup.alpha = 0
+            popup.isHidden = true
+            popupView = popup
+        }
+        let base = title(for: .normal) ?? baseKey
+        popupView?.updateTexts(base: base, outputs: flickOutputs)
+        popupView?.alpha = 1.0
+        popupView?.isHidden = false
+    }
+
+    private func hidePopup() {
+        popupView?.alpha = 0
+        popupView?.isHidden = true
+    }
+}
+
 final class KeyboardViewController: UIInputViewController {
     private let toolbar = UIStackView()
     private let main = UIStackView()
@@ -7,6 +196,41 @@ final class KeyboardViewController: UIInputViewController {
 
     // IME
     private let ime = InputEngine()
+
+    private let flickAssignments: [String: [FlickDirection: String]] = [
+        // 1段目 上=数字 下=記号
+        "q": [.up: "1", .down: "!"],
+        "w": [.up: "2", .down: "@"],
+        "e": [.up: "3", .down: "#"],
+        "r": [.up: "4", .down: "$"],
+        "t": [.up: "5", .down: "%"],
+        "y": [.up: "6", .down: "^"],
+        "u": [.up: "7", .down: "&"],
+        "i": [.up: "8", .down: "*"],
+        "o": [.up: "9", .down: "("],
+        "p": [.up: "0", .down: ")"],
+
+        // 2段目
+        "a": [.up: "-", .down: "'"],
+        "s": [.up: "_", .down: "\""],
+        "d": [.up: "=", .down: ":"],
+        "f": [.up: "+", .down: ";"],
+        "g": [.up: "[", .down: "/"],
+        "h": [.up: "]", .down: "\\"],
+        "j": [.up: "{", .down: "<"],
+        "k": [.up: "}", .down: ">"],
+        "l": [.up: "\"", .down: "?"],
+        "ー": [.up: "|", .down: "〜"],
+
+        // 3段目
+        "z": [.up: "~", .down: "|"],
+        "x": [.up: "`", .down: "\\"],
+        "c": [.up: "^", .down: "/"],
+        "v": [.up: "&", .down: "?"],
+        "b": [.up: "*", .down: "!"],
+        "n": [.up: "%", .down: "#"],
+        "m": [.up: "$", .down: "@"]
+    ]
 
     // オートリピート
     private var repeatTimer: Timer?
@@ -113,26 +337,63 @@ final class KeyboardViewController: UIInputViewController {
         row.distribution = .fillEqually
         row.spacing = 6
         keys.forEach { key in
-            let b = UIButton(type:.system)
-            b.backgroundColor = .secondarySystemBackground
-            b.layer.cornerRadius = 6
-            b.heightAnchor.constraint(equalToConstant: 44).isActive = true
-            b.titleLabel?.font = .systemFont(ofSize: 20)
-            b.setTitle(title(for:key), for: .normal)
-            b.tag = tag(for:key)
-
-            switch key {
-            case .delete:
-                b.accessibilityIdentifier = "delete"
-                b.addTarget(self, action: #selector(repeatPressDown(_:)), for: .touchDown)
-                b.addTarget(self, action: #selector(repeatPressEnd(_:)), for: [.touchUpInside, .touchUpOutside, .touchCancel, .touchDragExit])
-            default:
-                b.addTarget(self, action: #selector(keyTapped(_:)), for: .touchUpInside)
-            }
-
-            row.addArrangedSubview(b)
+            let button = createButton(for: key)
+            row.addArrangedSubview(button)
         }
         return row
+    }
+
+    private func createButton(for key: Key) -> UIButton {
+        switch key {
+        case .char(let s):
+            let button = FlickKeyButton()
+            button.baseKey = s
+            configureKeyAppearance(button)
+            button.tag = tag(for: key)
+            button.setTitle(title(for: key), for: .normal)
+            button.addTarget(self, action: #selector(keyTapped(_:)), for: .touchUpInside)
+            let lookupKey = s.lowercased()
+            if let outputs = flickAssignments[lookupKey] ?? flickAssignments[s] {
+                button.flickOutputs = outputs
+            }
+            button.commitHandler = { [weak self] _, output in
+                self?.handleFlickSelection(output: output)
+            }
+            return button
+        case .delete:
+            let button = UIButton(type: .system)
+            configureKeyAppearance(button)
+            button.setTitle(title(for: key), for: .normal)
+            button.tag = tag(for: key)
+            button.accessibilityIdentifier = "delete"
+            button.addTarget(self, action: #selector(repeatPressDown(_:)), for: .touchDown)
+            button.addTarget(self, action: #selector(repeatPressEnd(_:)), for: [.touchUpInside, .touchUpOutside, .touchCancel, .touchDragExit])
+            return button
+        default:
+            let button = UIButton(type: .system)
+            configureKeyAppearance(button)
+            button.setTitle(title(for: key), for: .normal)
+            button.tag = tag(for: key)
+            button.addTarget(self, action: #selector(keyTapped(_:)), for: .touchUpInside)
+            return button
+        }
+    }
+
+    private func configureKeyAppearance(_ button: UIButton) {
+        button.backgroundColor = .secondarySystemBackground
+        button.layer.cornerRadius = 6
+        button.heightAnchor.constraint(equalToConstant: 44).isActive = true
+        button.titleLabel?.font = .systemFont(ofSize: 20)
+        button.setTitleColor(.label, for: .normal)
+    }
+
+    private func handleFlickSelection(output: String) {
+        ime.commitPendingIfNeeded(proxy: textDocumentProxy, endOfWordTrigger: true)
+        textDocumentProxy.insertText(output)
+        if isShifted {
+            isShifted = false
+            refreshTitles()
+        }
     }
 
     private func title(for key:Key)->String {
