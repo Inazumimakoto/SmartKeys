@@ -96,21 +96,26 @@ private final class FlickPopupView: UIView {
 
 private final class FlickKeyButton: UIButton {
     var baseKey: String = ""
-    var flickOutputs: [FlickDirection: String] = [:]
+    var flickOutputs: [FlickDirection: String] = [:] {
+        didSet { updateFlickGuideTexts() }
+    }
     var commitHandler: ((FlickDirection, String) -> Void)?
 
     private var popupView: FlickPopupView?
     private var startPoint: CGPoint = .zero
     private var currentDirection: FlickDirection = .center
+    private var flickGuideLabels: [FlickDirection: UILabel] = [:]
 
     override init(frame: CGRect) {
         super.init(frame: frame)
         adjustsImageWhenHighlighted = false
+        setupFlickGuides()
     }
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         adjustsImageWhenHighlighted = false
+        setupFlickGuides()
     }
 
     override func beginTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
@@ -145,16 +150,22 @@ private final class FlickKeyButton: UIButton {
     }
 
     override func endTracking(_ touch: UITouch?, with event: UIEvent?) {
-        defer { hidePopup() }
-        if currentDirection == .center {
-            sendActions(for: .touchUpInside)
-        } else if let output = flickOutputs[currentDirection] {
-            commitHandler?(currentDirection, output)
-        } else {
-            sendActions(for: .touchUpInside)
+        defer {
+            hidePopup()
+            currentDirection = .center
         }
-        currentDirection = .center
-        super.endTracking(touch, with: event)
+
+        if currentDirection == .center {
+            super.endTracking(touch, with: event)
+            return
+        }
+
+        if let output = flickOutputs[currentDirection] {
+            commitHandler?(currentDirection, output)
+            super.cancelTracking(with: event)
+        } else {
+            super.endTracking(touch, with: event)
+        }
     }
 
     override func cancelTracking(with event: UIEvent?) {
@@ -181,11 +192,72 @@ private final class FlickKeyButton: UIButton {
         popupView?.updateTexts(base: base, outputs: flickOutputs)
         popupView?.alpha = 1.0
         popupView?.isHidden = false
+        layer.zPosition = 100
     }
 
     private func hidePopup() {
         popupView?.alpha = 0
         popupView?.isHidden = true
+        layer.zPosition = 0
+    }
+
+    private func setupFlickGuides() {
+        clipsToBounds = false
+        let font = UIFont.systemFont(ofSize: 10, weight: .regular)
+        let color = UIColor.secondaryLabel
+
+        func makeGuideLabel() -> UILabel {
+            let label = UILabel()
+            label.translatesAutoresizingMaskIntoConstraints = false
+            label.font = font
+            label.textColor = color
+            label.textAlignment = .center
+            label.isHidden = true
+            addSubview(label)
+            return label
+        }
+
+        let up = makeGuideLabel()
+        NSLayoutConstraint.activate([
+            up.centerXAnchor.constraint(equalTo: centerXAnchor),
+            up.topAnchor.constraint(equalTo: topAnchor, constant: 4)
+        ])
+        flickGuideLabels[.up] = up
+
+        let down = makeGuideLabel()
+        NSLayoutConstraint.activate([
+            down.centerXAnchor.constraint(equalTo: centerXAnchor),
+            down.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -4)
+        ])
+        flickGuideLabels[.down] = down
+
+        let left = makeGuideLabel()
+        NSLayoutConstraint.activate([
+            left.centerYAnchor.constraint(equalTo: centerYAnchor),
+            left.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 4)
+        ])
+        flickGuideLabels[.left] = left
+
+        let right = makeGuideLabel()
+        NSLayoutConstraint.activate([
+            right.centerYAnchor.constraint(equalTo: centerYAnchor),
+            right.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -4)
+        ])
+        flickGuideLabels[.right] = right
+
+        updateFlickGuideTexts()
+    }
+
+    private func updateFlickGuideTexts() {
+        for (direction, label) in flickGuideLabels {
+            if let text = flickOutputs[direction], !text.isEmpty {
+                label.text = text
+                label.isHidden = false
+            } else {
+                label.text = nil
+                label.isHidden = true
+            }
+        }
     }
 }
 
