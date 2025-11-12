@@ -100,6 +100,7 @@ private final class FlickKeyButton: UIButton {
         didSet { updateFlickGuideTexts() }
     }
     var commitHandler: ((FlickDirection, String) -> Void)?
+    var centerTapHandler: (() -> Void)?
 
     private var popupView: FlickPopupView?
     private var startPoint: CGPoint = .zero
@@ -156,6 +157,9 @@ private final class FlickKeyButton: UIButton {
         }
 
         if currentDirection == .center {
+            if isEnabled && didEndInside(touch) {
+                centerTapHandler?()
+            }
             super.endTracking(touch, with: event)
             return
         }
@@ -172,6 +176,12 @@ private final class FlickKeyButton: UIButton {
         hidePopup()
         currentDirection = .center
         super.cancelTracking(with: event)
+    }
+
+    private func didEndInside(_ touch: UITouch?) -> Bool {
+        guard let touch else { return isTouchInside }
+        let location = touch.location(in: self)
+        return bounds.contains(location)
     }
 
     private func showPopup() {
@@ -423,13 +433,16 @@ final class KeyboardViewController: UIInputViewController {
             configureKeyAppearance(button)
             button.tag = tag(for: key)
             button.setTitle(title(for: key), for: .normal)
-            button.addTarget(self, action: #selector(keyTapped(_:)), for: .touchUpInside)
             let lookupKey = s.lowercased()
             if let outputs = flickAssignments[lookupKey] ?? flickAssignments[s] {
                 button.flickOutputs = outputs
             }
             button.commitHandler = { [weak self] _, output in
                 self?.handleFlickSelection(output: output)
+            }
+            button.centerTapHandler = { [weak self, weak button] in
+                guard let button = button else { return }
+                self?.keyTapped(button)
             }
             return button
         case .delete:
@@ -725,4 +738,3 @@ final class KeyboardViewController: UIInputViewController {
         return false
     }
 }
-
